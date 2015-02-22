@@ -44,7 +44,8 @@ SRC_JS_VENDOR = $(addprefix $(SRC_JS_VENDOR_PATH)/,\
 
 all: deps lint test build
 
-build: $(BUILD_HBS) $(BUILD_CSS) $(BUILD_JS)
+build: build-handlebars $(BUILD_CSS) $(BUILD_JS)
+build-handlebars: $(BUILD_HBS)
 
 clean:
 	rm -rfv $(BUILD_HBS_PATH)/*
@@ -60,9 +61,11 @@ distclean: clean
 	rm -rfv $(SRC_SCSS_VENDOR_PATH)/*
 	rm -rfv $(SRC_JS_VENDOR_PATH)/*
 
-lint: deps-node makedeps/jshint.d
+lint: lint-js lint-travis
+lint-js: deps-node makedeps/jshint.d
+lint-travis: deps-ruby makedeps/travis-lint.d
 
-test: deps-node $(BUILD_HBS)
+test: deps-node build-handlebars
 	./node_modules/karma/bin/karma start
 
 # file rules
@@ -104,4 +107,8 @@ makedeps/gemfile.d: Gemfile
 
 makedeps/jshint.d: .jshintignore .jshintrc $(shell find $(SRC_JS_PATH) -type f -name '*.js')
 	./node_modules/.bin/jshint $(SRC_JS_PATH)
+	touch $@
+
+makedeps/travis-lint.d: .travis.yml
+	travis-lint
 	touch $@
