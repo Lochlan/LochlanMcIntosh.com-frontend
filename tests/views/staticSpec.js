@@ -1,6 +1,7 @@
 define([
+    'underscore',
     'views/static',
-], function (StaticView) {
+], function (_, StaticView) {
     'use strict';
 
     describe('static view', function () {
@@ -15,8 +16,35 @@ define([
                 expect(view).toBeDefined();
             });
 
-            it('should not have a template', function() {
+            it('should not have a template set', function() {
                 expect(view.template).not.toBeDefined();
+            });
+
+            it('should have a renderTemplate method', function () {
+                expect(view.renderTemplate).toBeDefined();
+            });
+
+            it('should throw an exception if render is called without an argument', function() {
+                expect(view.render).toThrow();
+            });
+        });
+
+        describe('when rendered with renderTemplate', function () {
+            beforeEach(function () {
+                spyOn(view, 'render').and.callThrough();
+                view.renderTemplate('about');
+            });
+
+            it('should have a template set', function() {
+                expect(view.template).toBeDefined();
+            });
+
+            it('should call render', function () {
+                expect(view.render).toHaveBeenCalled();
+            });
+
+            it('should have content in el', function () {
+                expect(view.el.innerHTML).not.toEqual('');
             });
         });
     });
