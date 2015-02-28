@@ -29,6 +29,22 @@ define([
             });
         });
 
+        describe('when rendered with a passed-in template', function () {
+            var template = _.template('<h1>Hello, world!</h1>');
+
+            beforeEach(function () {
+                view.render(template);
+            });
+
+            it('should have a template set to the passed-in value', function() {
+                expect(view.template).toEqual(template);
+            });
+
+            it('should have content in el', function () {
+                expect(view.el.innerHTML).not.toEqual('');
+            });
+        });
+
         describe('when rendered with renderTemplate', function () {
             beforeEach(function () {
                 spyOn(view, 'render').and.callThrough();

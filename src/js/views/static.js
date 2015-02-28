@@ -17,7 +17,10 @@ define([
             resume: resumeTemplate,
         },
 
-        render: function () {
+        render: function (template) {
+            if (template) {
+                this.template = template;
+            }
             this.$el.html(this.template());
 
             return this;
