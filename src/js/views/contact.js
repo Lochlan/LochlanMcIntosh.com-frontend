@@ -1,9 +1,8 @@
 define([
-    'underscore',
     'backbone',
     'models/contact',
     'templates/contact',
-], function (_, Backbone, Model, template) {
+], function (Backbone, Model, template) {
     'use strict';
 
     var ContactView = Backbone.View.extend({
