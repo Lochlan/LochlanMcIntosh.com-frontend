@@ -45,10 +45,9 @@ SRC_JS_VENDOR = $(addprefix $(SRC_JS_VENDOR_PATH)/,\
 
 # targets
 
-all: deps lint test build
+all: lint test build
 
-build: build-handlebars $(BUILD_CSS) $(BUILD_JS)
-build-handlebars: $(BUILD_HBS)
+build: $(BUILD_HBS) $(BUILD_CSS) $(BUILD_JS)
 
 clean:
 	rm -rfv\
@@ -58,10 +57,6 @@ clean:
 		$(BUILD_JS_PATH)\
 		$(SRC_SCSS_FONTS)\
 
-deps: deps-node deps-ruby
-deps-node: node_modules $(SRC_SCSS_VENDOR) $(SRC_JS_VENDOR)
-deps-ruby: makedeps/gemfile.d
-
 distclean: clean
 	rm -rfv\
 		$(SRC_JS_VENDOR_PATH)\
@@ -69,27 +64,27 @@ distclean: clean
 		node_modules\
 
 lint: lint-js lint-travis
-lint-js: deps-node makedeps/jshint.d
-lint-travis: deps-ruby makedeps/travis-lint.d
+lint-js: makedeps/jshint.d
+lint-travis: makedeps/travis-lint.d
 
-test: deps-node build-handlebars
+test: $(SRC_JS_VENDOR) $(BUILD_HBS) node_modules/karma/bin/karma
 	./node_modules/karma/bin/karma start
 
 # file rules
 
-$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS) $(SRC_SCSS_FONTS)
+$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS) $(SRC_SCSS_FONTS) $(SRC_SCSS_VENDOR)
 	mkdir -p "$(@D)"
 	sass --style compressed -I $(SRC_SCSS_PATH) -r sass-import_once $< $@
 
-$(BUILD_HBS_PATH)/%.js: $(SRC_HBS_PATH)/%.hbs
+$(BUILD_HBS_PATH)/%.js: $(SRC_HBS_PATH)/%.hbs node_modules/.bin/handlebars
 	mkdir -p "$(@D)"
-	./node_modules/.bin/handlebars $? --output $@ --amd
+	./node_modules/.bin/handlebars $< --output $@ --amd
 
-$(BUILD_JS_PATH)/%.js: node_modules $(shell find $(SRC_JS_PATH) -type f -name '*.js')
+$(BUILD_JS_PATH)/%.js: $(shell find $(SRC_JS_PATH) -type f -name '*.js') node_modules/.bin/r.js
 	mkdir -p "$(@D)"
 	./node_modules/.bin/r.js -o build-config.js name=$(basename $(@:$(BUILD_JS_PATH)/%=%)) out=$@
 
-$(BUILD_JS_PATH)/require.js: node_modules
+$(BUILD_JS_PATH)/require.js: node_modules/requirejs/require.js
 	mkdir -p "$(@D)"
 	cp ./node_modules/requirejs/require.js $@
 
@@ -103,7 +98,7 @@ $(SRC_JS_VENDOR) $(SRC_SCSS_VENDOR):
 	mkdir -p "$(@D)"
 	cp $? $@
 
-$(SRC_SCSS_FONTS):
+$(SRC_SCSS_FONTS): node_modules/.bin/webfont-dl
 	./node_modules/.bin/webfont-dl\
 		"http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic|Open+Sans:700,300,600,400"\
 		--css-rel=/$(BUILD_FONTS_PATH)\
@@ -113,16 +108,18 @@ $(SRC_SCSS_FONTS):
 node_modules: package.json
 	npm install
 	touch $@
+node_modules/%: node_modules
+	touch $@
 
 makedeps/gemfile.d: Gemfile
 	mkdir -p "$(@D)"
 	bundle install
 	touch $@
 
-makedeps/jshint.d: .jshintignore .jshintrc $(shell find $(SRC_JS_PATH) -type f -name '*.js')
+makedeps/jshint.d: .jshintignore .jshintrc $(shell find $(SRC_JS_PATH) -type f -name '*.js') node_modules/.bin/jshint
 	./node_modules/.bin/jshint $(SRC_JS_PATH)
 	touch $@
 
-makedeps/travis-lint.d: .travis.yml
+makedeps/travis-lint.d: .travis.yml makedeps/gemfile.d
 	travis-lint
 	touch $@
