@@ -51,11 +51,12 @@ build: build-handlebars $(BUILD_CSS) $(BUILD_JS)
 build-handlebars: $(BUILD_HBS)
 
 clean:
-	rm -rfv $(BUILD_HBS_PATH)/*
-	rm -rfv $(BUILD_CSS_PATH)/*
-	rm -rfv $(BUILD_JS_PATH)/*
-	rm -rfv $(BUILD_FONTS_PATH)
-	rm -rfv $(SRC_SCSS_FONTS)
+	rm -rfv\
+		$(BUILD_CSS_PATH)\
+		$(BUILD_FONTS_PATH)\
+		$(BUILD_HBS_PATH)\
+		$(BUILD_JS_PATH)\
+		$(SRC_SCSS_FONTS)\
 
 deps: deps-node deps-ruby
 deps-node: node_modules $(SRC_SCSS_VENDOR) $(SRC_JS_VENDOR)
