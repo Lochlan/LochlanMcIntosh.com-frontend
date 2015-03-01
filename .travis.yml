@@ -3,3 +3,6 @@ node_js:
   - 0.10
 install:
   - "make deps-node build-handlebars"
+
+notifications:
+  email: false
