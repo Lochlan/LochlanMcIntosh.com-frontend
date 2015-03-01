@@ -63,9 +63,10 @@ deps-node: node_modules $(SRC_SCSS_VENDOR) $(SRC_JS_VENDOR)
 deps-ruby: makedeps/gemfile.d
 
 distclean: clean
-	rm -rfv node_modules
-	rm -rfv $(SRC_SCSS_VENDOR_PATH)/*
-	rm -rfv $(SRC_JS_VENDOR_PATH)/*
+	rm -rfv\
+		$(SRC_JS_VENDOR_PATH)\
+		$(SRC_SCSS_VENDOR_PATH)\
+		node_modules\
 
 lint: lint-js lint-travis
 lint-js: deps-node makedeps/jshint.d
