@@ -4,5 +4,7 @@ node_modules
 src/scss/vendor
 src/js/templates
 src/js/vendor
+src/scss/partials/_fonts.scss
 static/css
+static/fonts
 static/js

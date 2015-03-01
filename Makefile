@@ -29,6 +29,9 @@ BUILD_CSS_PATH = static/css
 BUILD_CSS = $(call filter-partials,\
 	$(subst $(SRC_SCSS_PATH),$(BUILD_CSS_PATH),$(SRC_SCSS:.scss=.css)))
 
+SRC_SCSS_FONTS = $(SRC_SCSS_PATH)/partials/_fonts.scss
+BUILD_FONTS_PATH = static/fonts
+
 SRC_SCSS_VENDOR_PATH = $(SRC_SCSS_PATH)/vendor
 SRC_SCSS_VENDOR = $(SRC_SCSS_VENDOR_PATH)/_normalize.scss
 SRC_JS_VENDOR_PATH = $(SRC_JS_PATH)/vendor
@@ -51,6 +54,8 @@ clean:
 	rm -rfv $(BUILD_HBS_PATH)/*
 	rm -rfv $(BUILD_CSS_PATH)/*
 	rm -rfv $(BUILD_JS_PATH)/*
+	rm -rfv $(BUILD_FONTS_PATH)
+	rm -rfv $(SRC_SCSS_FONTS)
 
 deps: deps-node deps-ruby
 deps-node: node_modules $(SRC_SCSS_VENDOR) $(SRC_JS_VENDOR)
@@ -70,7 +75,7 @@ test: deps-node build-handlebars
 
 # file rules
 
-$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS)
+$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS) $(SRC_SCSS_FONTS)
 	mkdir -p "$(@D)"
 	sass --style compressed -I $(SRC_SCSS_PATH) -r sass-import_once $< $@
 
@@ -95,6 +100,13 @@ $(SRC_SCSS_VENDOR_PATH)/_normalize.scss: node_modules/normalize.css/normalize.cs
 $(SRC_JS_VENDOR) $(SRC_SCSS_VENDOR):
 	mkdir -p "$(@D)"
 	cp $? $@
+
+$(SRC_SCSS_FONTS):
+	./node_modules/.bin/webfont-dl\
+		"http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic|Open+Sans:700,300,600,400"\
+		--css-rel=/$(BUILD_FONTS_PATH)\
+		--font-out=$(BUILD_FONTS_PATH)\
+		--out $@
 
 node_modules: package.json
 	npm install
