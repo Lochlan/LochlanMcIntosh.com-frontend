@@ -16,12 +16,12 @@ BUILD_HBS_PATH = src/js/templates
 BUILD_HBS = $(subst $(SRC_HBS_PATH),$(BUILD_HBS_PATH),$(SRC_HBS:.hbs=.js))
 
 SRC_JS_PATH = src/js
-SRC_JS = $(addprefix $(SRC_JS_PATH)/,\
+SRC_JS = $(shell find $(SRC_JS_PATH) -type f -name '*.js')
+BUILD_JS_PATH = static/js
+BUILD_JS = $(addprefix $(BUILD_JS_PATH)/,\
 	vendor/require.js\
 	main.js\
 	)
-BUILD_JS_PATH = static/js
-BUILD_JS = $(subst $(SRC_JS_PATH),$(BUILD_JS_PATH),$(SRC_JS))
 
 SRC_SCSS_PATH = src/scss
 SRC_SCSS = $(shell find $(SRC_SCSS_PATH) -type f -name '*.scss')
@@ -80,7 +80,7 @@ $(BUILD_HBS_PATH)/%.js: $(SRC_HBS_PATH)/%.hbs node_modules/.bin/handlebars
 	mkdir -p "$(@D)"
 	./node_modules/.bin/handlebars $< --output $@ --amd
 
-$(BUILD_JS_PATH)/%.js: $(shell find $(SRC_JS_PATH) -type f -name '*.js') node_modules/.bin/r.js
+$(BUILD_JS_PATH)/%.js: $(SRC_JS) node_modules/.bin/r.js
 	mkdir -p "$(@D)"
 	./node_modules/.bin/r.js -o build-config.js name=$(basename $(@:$(BUILD_JS_PATH)/%=%)) out=$@
 
@@ -116,7 +116,7 @@ makedeps/gemfile.d: Gemfile
 	bundle install
 	touch $@
 
-makedeps/jshint.d: .jshintignore .jshintrc $(shell find $(SRC_JS_PATH) -type f -name '*.js') node_modules/.bin/jshint
+makedeps/jshint.d: .jshintignore .jshintrc $(SRC_JS) node_modules/.bin/jshint
 	./node_modules/.bin/jshint $(SRC_JS_PATH)
 	touch $@
 
