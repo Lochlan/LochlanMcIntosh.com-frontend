@@ -9,6 +9,21 @@ define filter-partials
 			$(if $(FILE:_%=),$(file)))
 endef
 
+# $(call get-jshintignore-patterns,file-list)
+# Changes .jshintignore entries from file-list into make-compatible patterns
+# TODO handle glob pattern
+define get-jshintignore-patterns
+	$(foreach entry,\
+		$1,\
+		$(shell test -d "$(entry)" &&\
+			echo $(entry:%/=%)/%\
+		)\
+		$(shell test -f "$(entry)" &&\
+			echo $(entry)\
+		)\
+	)
+endef
+
 # settings
 SRC_HBS_PATH = src/handlebars
 SRC_HBS = $(shell find $(SRC_HBS_PATH) -type f -name '*.hbs')
@@ -116,7 +131,10 @@ makedeps/gemfile.d: Gemfile
 	bundle install
 	touch $@
 
-makedeps/jshint.d: .jshintignore .jshintrc $(SRC_JS) node_modules/.bin/jshint
+JSHINTIGNORE_ENTRIES = $(shell cat .jshintignore | sed 's/^\s*//' | sed '/^\#/d')
+JSHINT_IGNORE_PATTERNS = $(call get-jshintignore-patterns,$(JSHINTIGNORE_ENTRIES))
+JSHINT_JS_DEPENDENCIES = $(filter-out $(JSHINT_IGNORE_PATTERNS), $(SRC_JS))
+makedeps/jshint.d: .jshintignore .jshintrc $(JSHINT_JS_DEPENDENCIES) node_modules/.bin/jshint
 	./node_modules/.bin/jshint $(SRC_JS_PATH)
 	touch $@
 
