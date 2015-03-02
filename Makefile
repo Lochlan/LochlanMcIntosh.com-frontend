@@ -141,3 +141,14 @@ makedeps/jshint.d: .jshintignore .jshintrc $(JSHINT_JS_DEPENDENCIES) node_module
 makedeps/travis-lint.d: .travis.yml makedeps/gemfile.d
 	travis-lint
 	touch $@
+
+# performance settings
+
+# turn off built-in implicit rules
+MAKEFLAGS = --no-builtin-rules
+
+# delete default suffixes
+.SUFFIXES:
+
+# declare phony targets
+.PHONY: all build clean distclean lint lint-js lint-travis test
