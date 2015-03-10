@@ -1,5 +1,7 @@
 # [LochlanMcIntosh.com](http://www.lochlanmcintosh.com/)
 
+[![Build Status](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend.png?branch=master)](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend)
+
 My personal website!  This repo also serves as a living example of what I think a well-written and modern front-end project might look like, represented by the front-end stack I am partial towards and most experienced with.
 
 This website is powered by:
