@@ -25,7 +25,7 @@ define([
             });
 
             it('should throw an exception if render is called without an argument', function() {
-                expect(view.render).toThrow();
+                expect(view.render.bind(view)).toThrow();
             });
         });
 
