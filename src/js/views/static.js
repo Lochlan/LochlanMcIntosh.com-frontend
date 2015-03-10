@@ -17,19 +17,33 @@ define([
             resume: resumeTemplate,
         },
 
+        initialize: function (options) {
+            if (options && options.template) {
+                this.setTemplate(options.template);
+            }
+        },
+
         render: function (template) {
             if (template) {
-                this.template = template;
+                this.setTemplate(template);
             }
+
             this.$el.html(this.template());
 
             return this;
         },
 
         renderTemplate: function(templateKey) {
-            this.template = this.templates[templateKey];
-            return this.render();
-        }
+            return this.render(templateKey);
+        },
+
+        setTemplate: function (template) {
+            if (typeof template === 'string') {
+                this.template = this.templates[template];
+            } else {
+                this.template = template;
+            }
+        },
 
     });
 

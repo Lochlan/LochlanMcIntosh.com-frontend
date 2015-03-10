@@ -7,25 +7,127 @@ define([
     describe('static view', function () {
         var view;
 
-        beforeEach(function() {
-            view = new StaticView();
-        });
-
         describe('when constructing', function () {
-            it ('should exist', function () {
-                expect(view).toBeDefined();
+            // TODO Reduce code duplication in these tests
+            describe('without a passed-in or specified template', function () {
+
+                beforeEach(function() {
+                    view = new StaticView();
+                });
+
+                // shared
+
+                it ('should exist', function () {
+                    expect(view).toBeDefined();
+                });
+
+                it('should have an initialize method', function () {
+                    expect(view.initialize).toBeDefined();
+                });
+
+                it('should have a render method', function () {
+                    expect(view.render).toBeDefined();
+                });
+
+                it('should have a renderTemplate method', function () {
+                    expect(view.renderTemplate).toBeDefined();
+                });
+
+                 it('should have a setTemplate method', function () {
+                    expect(view.setTemplate).toBeDefined();
+                });
+
+                // unshared
+
+                it('should not have a template set', function() {
+                    expect(view.template).not.toBeDefined();
+                });
+
+                it('should throw an exception if render is called without an argument', function() {
+                    expect(view.render.bind(view)).toThrow();
+                });
             });
 
-            it('should not have a template set', function() {
-                expect(view.template).not.toBeDefined();
+            describe('with a specified template', function () {
+                beforeEach(function() {
+                    view = new StaticView({
+                        template: 'home',
+                    });
+                });
+
+                // shared
+
+                it ('should exist', function () {
+                    expect(view).toBeDefined();
+                });
+
+                it('should have an initialize method', function () {
+                    expect(view.initialize).toBeDefined();
+                });
+
+                it('should have a render method', function () {
+                    expect(view.render).toBeDefined();
+                });
+
+                it('should have a renderTemplate method', function () {
+                    expect(view.renderTemplate).toBeDefined();
+                });
+
+                 it('should have a setTemplate method', function () {
+                    expect(view.setTemplate).toBeDefined();
+                });
+
+                // unshared
+
+                it('should have a template set', function() {
+                    expect(view.template).toBeDefined();
+                });
+
+                it('should not throw an exception if render is called without an argument', function() {
+                    expect(view.render.bind(view)).not.toThrow();
+                });
             });
 
-            it('should have a renderTemplate method', function () {
-                expect(view.renderTemplate).toBeDefined();
-            });
+            describe('with a passed-in template', function () {
+                var template = _.template('<h1>Hello, world!</h1>');
 
-            it('should throw an exception if render is called without an argument', function() {
-                expect(view.render.bind(view)).toThrow();
+                beforeEach(function() {
+                    view = new StaticView({
+                        template: template,
+                    });
+                });
+
+                // shared
+
+                it ('should exist', function () {
+                    expect(view).toBeDefined();
+                });
+
+                it('should have an initialize method', function () {
+                    expect(view.initialize).toBeDefined();
+                });
+
+                it('should have a render method', function () {
+                    expect(view.render).toBeDefined();
+                });
+
+                it('should have a renderTemplate method', function () {
+                    expect(view.renderTemplate).toBeDefined();
+                });
+
+                 it('should have a setTemplate method', function () {
+                    expect(view.setTemplate).toBeDefined();
+                });
+
+                // unshared
+
+                it('should have a template set', function() {
+                    expect(view.template).toBeDefined();
+                });
+
+                it('should not throw an exception if render is called without an argument', function() {
+                    expect(view.render.bind(view)).not.toThrow();
+                });
             });
         });
 
@@ -33,6 +135,7 @@ define([
             var template = _.template('<h1>Hello, world!</h1>');
 
             beforeEach(function () {
+                view = new StaticView();
                 view.render(template);
             });
 
@@ -47,6 +150,7 @@ define([
 
         describe('when rendered with renderTemplate', function () {
             beforeEach(function () {
+                view = new StaticView();
                 spyOn(view, 'render').and.callThrough();
                 view.renderTemplate('about');
             });
