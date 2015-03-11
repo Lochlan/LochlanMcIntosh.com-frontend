@@ -2,23 +2,23 @@ define([
     'backbone',
     'views/contact',
     'views/static',
-], function (Backbone, ContactView, StaticView) {
+    'views/transitioner',
+], function (Backbone, ContactView, StaticView, TransitionerView) {
     'use strict';
 
     var Router = Backbone.Router.extend({
 
         routes: {
             '': 'home',
-            'about': 'static',
+            'about': 'transitioner',
             'contact': 'contact',
-            'home': 'static',
-            'portfolio': 'static',
-            'resume': 'static',
+            'home': 'transitioner',
+            'portfolio': 'transitioner',
+            'resume': 'transitioner',
         },
 
         views: {
-            contact: new ContactView({ el: '.js-Backbone'}),
-            staticpage: new StaticView({ el: '.js-Backbone'}),
+            transitioner: new TransitionerView({ el: '.js-Backbone'}),
         },
 
         initialize: function () {
@@ -27,16 +27,22 @@ define([
             });
         },
 
+        // route methods
+
         contact: function () {
-            this.views.contact.render();
+            this.views.transitioner.transition(new ContactView());
         },
 
         home: function () {
-            this.views.staticpage.renderTemplate('home');
+            this.views.transitioner.transition(new StaticView({
+                template: 'home',
+            }));
         },
 
-        static: function () {
-            this.views.staticpage.renderTemplate(Backbone.history.fragment);
+        transitioner: function () {
+            this.views.transitioner.transition(new StaticView({
+                template: Backbone.history.fragment,
+            }));
         },
 
     });
