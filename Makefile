@@ -115,7 +115,7 @@ $(SRC_JS_VENDOR) $(SRC_SCSS_VENDOR):
 
 $(SRC_SCSS_FONTS): node_modules/.bin/webfont-dl
 	./node_modules/.bin/webfont-dl\
-		"http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic|Open+Sans:700,300,600,400"\
+		"http://fonts.googleapis.com/css?family=Libre+Baskerville:400,700,400italic|Lato:300,400,700"\
 		--css-rel=/$(BUILD_FONTS_PATH)\
 		--font-out=$(BUILD_FONTS_PATH)\
 		--out $@
