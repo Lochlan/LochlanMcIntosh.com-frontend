@@ -135,10 +135,12 @@ JSHINTIGNORE_ENTRIES = $(shell cat .jshintignore | sed 's/^\s*//' | sed '/^\#/d'
 JSHINT_IGNORE_PATTERNS = $(call get-jshintignore-patterns,$(JSHINTIGNORE_ENTRIES))
 JSHINT_JS_DEPENDENCIES = $(filter-out $(JSHINT_IGNORE_PATTERNS), $(SRC_JS))
 makedeps/jshint.d: .jshintignore .jshintrc $(JSHINT_JS_DEPENDENCIES) node_modules/.bin/jshint
+	mkdir -p "$(@D)"
 	./node_modules/.bin/jshint $(SRC_JS_PATH)
 	touch $@
 
 makedeps/travis-lint.d: .travis.yml makedeps/gemfile.d
+	mkdir -p "$(@D)"
 	travis-lint
 	touch $@
 
