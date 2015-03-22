@@ -87,7 +87,7 @@ test: $(SRC_JS_VENDOR) $(BUILD_HBS) node_modules/karma/bin/karma
 
 # file rules
 
-$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS) $(SRC_SCSS_FONTS) $(SRC_SCSS_VENDOR)
+$(BUILD_CSS_PATH)/%.css: $(SRC_SCSS_PATH)/%.scss $(SRC_SCSS) $(SRC_SCSS_FONTS) $(SRC_SCSS_VENDOR) makedeps/gemfile.d
 	mkdir -p "$(@D)"
 	sass --style compressed -I $(SRC_SCSS_PATH) -r sass-import_once $< $@
 
