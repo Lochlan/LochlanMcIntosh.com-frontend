@@ -95,7 +95,7 @@ $(BUILD_HBS_PATH)/%.js: $(SRC_HBS_PATH)/%.hbs node_modules/.bin/handlebars
 	mkdir -p "$(@D)"
 	./node_modules/.bin/handlebars $< --output $@ --amd
 
-$(BUILD_JS_PATH)/%.js: $(SRC_JS) node_modules/.bin/r.js
+$(BUILD_JS_PATH)/%.js: $(SRC_JS_VENDOR) $(SRC_JS) node_modules/.bin/r.js
 	mkdir -p "$(@D)"
 	./node_modules/.bin/r.js -o build-config.js name=$(basename $(@:$(BUILD_JS_PATH)/%=%)) out=$@
 
