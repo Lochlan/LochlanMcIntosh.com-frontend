@@ -1,5 +1,8 @@
 # [LochlanMcIntosh.com](http://www.lochlanmcintosh.com/)
 
+## Please note that this project is no longer being updated.  This front end has been itegrated into my "[LochlanMcIntosh.com](https://github.com/Lochlan/LochlanMcIntosh.com)" repo, a Python/Django project.  Please go there and take a look!
+
+
 [![Build Status](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend.png?branch=master)](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend)
 
 My personal website!  This repo also serves as a living example of what I think a well-written and modern front-end project might look like, represented by the front-end stack I am partial towards and most experienced with.
