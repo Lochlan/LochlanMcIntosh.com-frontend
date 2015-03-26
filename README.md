@@ -1,6 +1,6 @@
 # [LochlanMcIntosh.com](http://www.lochlanmcintosh.com/)
 
-## Please note that this project is no longer being updated.  This front end has been itegrated into my "[LochlanMcIntosh.com](https://github.com/Lochlan/LochlanMcIntosh.com)" repo, a Python/Django project.  Please go there and take a look!
+## Please note that this project is no longer being updated.  This front end has been integrated into my "[LochlanMcIntosh.com](https://github.com/Lochlan/LochlanMcIntosh.com)" repo, a Python/Django project.  Please go there and take a look!
 
 
 [![Build Status](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend.png?branch=master)](https://travis-ci.org/Lochlan/LochlanMcIntosh.com-frontend)
